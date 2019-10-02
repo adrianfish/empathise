@@ -14,11 +14,10 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.babelSyntaxPlugins = [
-    require('babel-plugin-syntax-exponentiation-operator'),
-    require('babel-plugin-syntax-async-functions'),
-    require('babel-plugin-syntax-async-generators'),
-    require('babel-plugin-syntax-export-extensions'),
-    require('babel-plugin-syntax-dynamic-import'),
-    require('babel-plugin-syntax-object-rest-spread')
+  require('babel-plugin-syntax-exponentiation-operator'),
+  require('babel-plugin-syntax-async-functions'),
+  require('babel-plugin-syntax-async-generators'),
+  require('babel-plugin-syntax-export-extensions'),
+  require('babel-plugin-syntax-dynamic-import'),
+  require('babel-plugin-syntax-object-rest-spread')
 ];
-//# sourceMappingURL=babel-syntax-plugins.js.map

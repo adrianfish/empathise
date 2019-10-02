@@ -13,14 +13,17 @@
  * http://polymer.github.io/PATENTS.txt
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+    function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
 };
+
 Object.defineProperty(exports, "__esModule", { value: true });
+
 const childProcess = require("child_process");
 const fs = require("fs");
 const os_1 = require("os");
@@ -29,17 +32,22 @@ const util_1 = require("util");
 const mkdtemp = util_1.promisify(fs.mkdtemp);
 const writeFile = util_1.promisify(fs.writeFile);
 const exec = util_1.promisify(childProcess.exec);
+
+/**
+ * Creates a staging directory under the OS tmp directory, creates a package.json in there
+ * and then runs "npm i" to install all the node dependencies into that directory. The new
+ * node_modules directory path is then returned
+ */
 exports.assetStage = (config) => __awaiter(this, void 0, void 0, function* () {
-    const folder = yield mkdtemp(path_1.join(os_1.tmpdir(), 'asset_stage'));
-    console.log(`Staging asset dependencies at ${folder}`);
-    const manifest = { name: 'asset-stage', dependencies: config };
-    const manifestPath = path_1.join(folder, 'package.json');
-    console.log('Writing temporary asset manifest...');
-    yield writeFile(manifestPath, JSON.stringify(manifest));
-    console.log('Installing modules to asset stage...');
-    yield exec('npm i', {
-        cwd: folder,
-    });
-    return path_1.join(folder, 'node_modules');
+
+  const folder = yield mkdtemp(path_1.join(os_1.tmpdir(), 'asset_stage'));
+  console.log(`Staging asset dependencies at ${folder}`);
+  const manifest = { name: 'asset-stage', dependencies: config };
+  const manifestPath = path_1.join(folder, 'package.json');
+  console.log('Writing temporary asset manifest...');
+  yield writeFile(manifestPath, JSON.stringify(manifest));
+  console.log('Installing modules to asset stage...');
+  yield exec('npm i', { cwd: folder });
+  //return path_1.join(folder, 'node_modules');
+  return folder;
 });
-//# sourceMappingURL=asset-stage.js.map
