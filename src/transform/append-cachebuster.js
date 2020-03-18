@@ -24,29 +24,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
 Object.defineProperty(exports, "__esModule", { value: true });
 
-const childProcess = require("child_process");
-const fs = require("fs");
-const os_1 = require("os");
-const path_1 = require("path");
-const util_1 = require("util");
-const mkdtemp = util_1.promisify(fs.mkdtemp);
-const writeFile = util_1.promisify(fs.writeFile);
-const exec = util_1.promisify(childProcess.exec);
+const babelCore = require("babel-core");
+const babel_plugin_append_cachebuster = require("../babel-plugin-append-cachebuster.js");
+const file_js_1 = require("../file.js");
+const stream_js_1 = require("../stream.js");
 
-/**
- * Creates a staging directory under the OS tmp directory, creates a package.json in there
- * and then runs "npm i" to install all the node dependencies into that directory. The new
- * node_modules directory path is then returned
- */
-exports.assetStage = (config) => __awaiter(this, void 0, void 0, function* () {
+exports.appendCacheBuster = (query) => stream_js_1.transformStream((file) => __awaiter(this, void 0, void 0, function* () {
 
-  const folder = yield mkdtemp(path_1.join(os_1.tmpdir(), 'asset_stage'));
-  console.log(`Staging asset dependencies at ${folder}`);
-  const manifest = { name: 'asset-stage', dependencies: config };
-  const manifestPath = path_1.join(folder, 'package.json');
-  console.log('Writing temporary asset manifest...');
-  yield writeFile(manifestPath, JSON.stringify(manifest));
-  console.log('Installing modules to asset stage...');
-  yield exec('npm i', { cwd: folder });
-  return path_1.join(folder, 'node_modules');
-});
+  const plugins = [babel_plugin_append_cachebuster.appendCacheBuster(file.path, query)];
+  const scriptSource = yield file_js_1.getFileContents(file);
+  try {
+    console.log(`Appending cachebuster to ${file.path}`);
+    const transformedScriptSource = babelCore.transform(scriptSource, { plugins }).code;
+    file.contents = Buffer.from(transformedScriptSource);
+  } catch (error) {
+    console.error(`Failed to append cachebuster to ${file.path}`);
+    console.error(error);
+  }
+  return file;
+}));
