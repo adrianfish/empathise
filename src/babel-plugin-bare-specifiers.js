@@ -39,8 +39,6 @@ exports.resolveBareSpecifiers = (filePath, isComponentRequest, packageName, comp
           return;
       }
 
-      console.log(specifier);
-
       let resolvedSpecifier;
       try {
         resolvedSpecifier = resolve.sync(specifier, {
