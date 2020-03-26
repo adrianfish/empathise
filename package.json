@@ -1,5 +1,5 @@
 {
-  "name": "@sakaicontrib/empathise",
+  "name": "@adrianfish/empathise",
   "version": "0.1.1",
   "description": "A transpiler that focuses on transforming bare module specifiers to ES6 compatible imports. Also supports appending cache busting queries to the end of imports.",
   "main": "src/index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/sakaicontrib/empathise.git"
+    "url": "git+ssh://git@github.com/adrianfish/empathise.git"
   },
   "keywords": [
     "es6 compatible",
@@ -20,9 +20,9 @@
   "author": "Adrian Fish",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/sakaicontrib/empathise/issues"
+    "url": "https://github.com/adrianfish/empathise/issues"
   },
-  "homepage": "https://github.com/sakaicontrib/empathise#readme",
+  "homepage": "https://github.com/adrianfish/empathise#readme",
   "dependencies": {
     "@types/babel-core": "^6.25.3",
     "@types/babel-traverse": "^6.25.3",
