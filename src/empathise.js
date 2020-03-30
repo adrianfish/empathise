@@ -78,7 +78,7 @@ exports.applyEmpathy = (outputFolder, includes, excludes, query) => __awaiter(th
   try {
     yield new Promise((resolve, reject) => {
 
-      vfs.src([`${assetStagePath}${path_1.sep}**${path_1.sep}*.js`], { cwd: assetStagePath })
+      vfs.src([`${assetStagePath}${path_1.sep}**${path_1.sep}*.js`, `!core-js/`, `!/@babel/runtime/`], { cwd: assetStagePath, nodir: true })
         .pipe(inject_process_module_js_1.injectProcessModuleTransform())
         .on('error', reject)
         .pipe(resolution_markers_js_1.resolutionMarkerTransform(assetStagePath))

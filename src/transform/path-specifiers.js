@@ -24,14 +24,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
 Object.defineProperty(exports, "__esModule", { value: true });
 
-const babelCore = require("babel-core");
+const babelCore = require("@babel/core");
 const path_1 = require("path");
 const vfs = require("vinyl-fs");
 const babel_syntax_plugins_js_1 = require("../babel-syntax-plugins.js");
 const file_js_1 = require("../file.js");
 const specifier_js_1 = require("../specifier.js");
 const stream_js_1 = require("../stream.js");
-const exportExtensions = require('babel-plugin-syntax-export-extensions');
+const exportExtensions = require('@babel/plugin-syntax-export-extensions');
 exports.SpecifierVisitor = 'ImportDeclaration|ExportNamedDeclaration|ExportAllDeclaration';
 
 class SpecifierProxy {

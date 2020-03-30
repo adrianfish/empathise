@@ -20,13 +20,14 @@ const pathlib = require("path");
 const isWindows = require("is-windows");
 const whatwgUrl = require("whatwg-url");
 const pathIsInside = require('path-is-inside');
-const exportExtensions = require('babel-plugin-syntax-export-extensions');
+const exportExtensions = require('@babel/plugin-syntax-export-extensions');
+
 const isPathSpecifier = (s) => /^\.{0,2}\//.test(s);
 /**
  * Rewrites so-called "bare module specifiers" to be web-compatible paths.
  */
 exports.resolveBareSpecifiers = (filePath, isComponentRequest, packageName, componentDir, rootDir, query) => ({
-  inherits: exportExtensions,
+  inherits: exportExtensions.default,
   visitor: {
     'ImportDeclaration|ExportNamedDeclaration|ExportAllDeclaration'(path) {
       const node = path.node;

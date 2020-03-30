@@ -24,7 +24,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
 Object.defineProperty(exports, "__esModule", { value: true });
 
-const babelCore = require("babel-core");
+const babelCore = require("@babel/core");
 const path_1 = require("path");
 const File = require("vinyl");
 const babel_syntax_plugins_js_1 = require("../babel-syntax-plugins.js");
