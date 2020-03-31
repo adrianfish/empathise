@@ -35,34 +35,6 @@ const copy = require("util").promisify(require("fs-extra").copy);
 
 exports.applyEmpathy = (outputFolder, includes, excludes, query) => __awaiter(this, void 0, void 0, function* () {
 
-  const manifestPath = require("path").join(cwd, 'package.json');
-  const manifest = require(manifestPath);
-  const { dependencies } = manifest;
-  // Compute asset dependencies from package manifest dependencies.
-  // If includes are specified, only those packages will be considered.
-  // Packages explicitly listed in excludes will not be considered.
-  const assetDependencies = Object.keys(dependencies || {}).reduce((assetDependencies, key) => {
-
-    let allowed = true;
-    if (includes.length) {
-      allowed = includes.indexOf(key) > -1;
-    }
-    allowed = allowed && excludes.indexOf(key) === -1;
-    if (allowed) {
-      assetDependencies[key] = dependencies[key];
-    }
-    return assetDependencies;
-  }, {});
-
-  let assetStagePath;
-  try {
-    assetStagePath = yield require("./asset-stage.js").assetStage(assetDependencies);
-  } catch (error) {
-    console.error('Unable to stage assets for specifier conversion');
-    console.error(error);
-    return;
-  }
-
   try {
     yield new Promise((resolve, reject) => {
       vfs.src([`${cwd}${path_1.sep}js${path_1.sep}**${path_1.sep}*.js`])
@@ -75,30 +47,63 @@ exports.applyEmpathy = (outputFolder, includes, excludes, query) => __awaiter(th
     console.error(error);
   }
 
-  try {
-    yield new Promise((resolve, reject) => {
+  const manifestPath = require("path").join(cwd, 'package.json');
+  const manifest = require(manifestPath);
+  const { dependencies } = manifest;
+  const hasDependencies = dependencies && Object.keys(dependencies).length;
 
-      vfs.src([`${assetStagePath}${path_1.sep}**${path_1.sep}*.js`, `!core-js/`, `!/@babel/runtime/`], { cwd: assetStagePath, nodir: true })
-        .pipe(inject_process_module_js_1.injectProcessModuleTransform())
-        .on('error', reject)
-        .pipe(resolution_markers_js_1.resolutionMarkerTransform(assetStagePath))
-        .on('error', reject)
-        .pipe(bare_specifiers_js_1.bareToPathSpecifiersTransform(query))
-        .on('error', reject)
-        .pipe(vfs.dest(assetStagePath))
-        .on('error', reject)
-        .on('end', () => resolve());
-    });
-    console.log('Empathise applied!');
-  } catch (error) {
-    console.error('Failed to transform asset specifiers');
-    console.error(error);
-  }
-  try {
-    yield copy(assetStagePath, path_1.resolve(outputFolder));
-  } catch (error) {
-    console.error('Failed to create assets directory');
-    console.error(error);
+  if (hasDependencies) {
+    // Compute asset dependencies from package manifest dependencies.
+    // If includes are specified, only those packages will be considered.
+    // Packages explicitly listed in excludes will not be considered.
+    const assetDependencies = Object.keys(dependencies || {}).reduce((assetDependencies, key) => {
+
+      let allowed = true;
+      if (includes.length) {
+        allowed = includes.indexOf(key) > -1;
+      }
+      allowed = allowed && excludes.indexOf(key) === -1;
+      if (allowed) {
+        assetDependencies[key] = dependencies[key];
+      }
+      return assetDependencies;
+    }, {});
+
+    let assetStagePath;
+    try {
+      assetStagePath = yield require("./asset-stage.js").assetStage(assetDependencies);
+    } catch (error) {
+      console.error('Unable to stage assets for specifier conversion');
+      console.error(error);
+      return;
+    }
+  
+    try {
+      yield new Promise((resolve, reject) => {
+
+        vfs.src([`${assetStagePath}${path_1.sep}**${path_1.sep}*.js`, `!core-js/`, `!/@babel/runtime/`], { cwd: assetStagePath, nodir: true })
+          .pipe(inject_process_module_js_1.injectProcessModuleTransform())
+          .on('error', reject)
+          .pipe(resolution_markers_js_1.resolutionMarkerTransform(assetStagePath))
+          .on('error', reject)
+          .pipe(bare_specifiers_js_1.bareToPathSpecifiersTransform(query))
+          .on('error', reject)
+          .pipe(vfs.dest(assetStagePath))
+          .on('error', reject)
+          .on('end', () => resolve());
+      });
+      console.log('Empathise applied!');
+    } catch (error) {
+      console.error('Failed to transform asset specifiers');
+      console.error(error);
+    }
+
+    try {
+      yield copy(assetStagePath, path_1.resolve(outputFolder));
+    } catch (error) {
+      console.error('Failed to create assets directory');
+      console.error(error);
+    }
   }
 });
 
