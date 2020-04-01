@@ -13,6 +13,7 @@
  * http://polymer.github.io/PATENTS.txt
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+
 exports.babelSyntaxPlugins = [
   require('@babel/plugin-syntax-async-generators'),
   require('@babel/plugin-syntax-export-extensions'),
