@@ -92,7 +92,7 @@ exports.resolveBareSpecifiers = (filePath, isComponentRequest, packageName, comp
       }
 
       if (query) {
-        relativeSpecifierUrl += query;
+        relativeSpecifierUrl += "?" + query;
       }
 
       if (isWindows()) {
