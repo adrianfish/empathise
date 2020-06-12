@@ -25,6 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 const path_1 = require("path");
 const vfs = require("vinyl-fs");
+const append_cachebuster = require("./transform/append-cachebuster.js");
 const bare_specifiers_js_1 = require("./transform/bare-specifiers.js");
 const inject_process_module_js_1 = require("./transform/inject-process-module.js");
 const path_specifiers_js_1 = require("./transform/path-specifiers.js");
@@ -64,7 +65,19 @@ exports.applyEmpathy = (outputFolder, includes, excludes, query) => __awaiter(th
       console.error(error);
       return;
     }
-  
+
+    try {
+      yield new Promise((resolve, reject) => {
+        vfs.src([`${cwd}${path_1.sep}js${path_1.sep}**${path_1.sep}*.js`])
+          .pipe(append_cachebuster.appendCacheBuster(query))
+          .pipe(vfs.dest(`${cwd}${path_1.sep}`)).on('end', () => resolve());
+      });
+      console.log('Top level files copied.');
+    } catch (error) {
+      console.error('Failed to copy top level files');
+      console.error(error);
+    }
+
     try {
       yield new Promise((resolve, reject) => {
 
