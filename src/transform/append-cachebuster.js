@@ -24,7 +24,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
 Object.defineProperty(exports, "__esModule", { value: true });
 
-const babelCore = require("babel-core");
+const babelCore = require("@babel/core");
 const babel_plugin_append_cachebuster = require("../babel-plugin-append-cachebuster.js");
 const file_js_1 = require("../file.js");
 const stream_js_1 = require("../stream.js");
