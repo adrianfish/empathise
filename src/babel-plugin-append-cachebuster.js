@@ -18,7 +18,7 @@ exports.appendCacheBuster = (filePath, query) => ({
       let specifier = node.source.value;
 
       if (query) {
-        specifier += query;
+        specifier += `?${query}`;
       }
 
       node.source.value = specifier;
