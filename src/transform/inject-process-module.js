@@ -31,6 +31,7 @@ const babel_syntax_plugins_js_1 = require("../babel-syntax-plugins.js");
 const file_js_1 = require("../file.js");
 const stream_js_1 = require("../stream.js");
 const processRe = /process\./;
+const isWindows = require("is-windows");
 
 exports.DeclarationVisitor = 'ClassDeclaration|FunctionDeclaration|VariableDeclarator';
 
@@ -69,7 +70,10 @@ exports.injectProcessModuleTransform = () => {
           });
           files.push(processModuleFile);
         }
-        const relativePath = path_1.relative(path_1.dirname(file.path), processModuleFile.path);
+        let relativePath = path_1.relative(path_1.dirname(file.path), processModuleFile.path);
+        if (isWindows()) {
+          relativePath = relativePath.replace(/\\/g, '/');
+        }
         console.log(`Prepending "process" module to ${path_1.relative(file.cwd, file.path)}`);
         file.contents = Buffer.from(`import { process } from '${relativePath}';
 ${contents}`);
