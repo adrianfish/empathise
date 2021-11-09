@@ -12,7 +12,8 @@ resultant js files will be slightly different in formatting to the source. You t
 commit those transformed js files to your revision control system.
 
 In your project where your package.json lives, run:
-./node\_modules/.bin/empathise install
+
+    ./node\_modules/.bin/empathise install
 
 You should now have an assets directory. Take a look in there and you should see that only your
 dependencies from package.json are in there, NOT your dev dependencies. Have a look at one of the 
