@@ -1,6 +1,6 @@
 {
   "name": "@adrianfish/empathise",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "A transpiler that focuses on transforming bare module specifiers to ES6 compatible imports. Also supports appending cache busting queries to the end of imports.",
   "main": "src/index.js",
   "bin": "bin/empathise",
@@ -40,7 +40,6 @@
     "@types/find-root": "^1.1.1",
     "@types/fs-extra": "^8.1.0",
     "@types/is-windows": "^1.0.0",
-    "@types/node": "^13.9.5",
     "@types/resolve": "^1.14.0",
     "@types/through2": "^2.0.34",
     "@types/vinyl": "^2.0.4",
